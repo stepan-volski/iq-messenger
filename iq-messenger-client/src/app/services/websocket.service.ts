@@ -3,13 +3,9 @@ import { Observable, Observer } from 'rxjs';
 import { AnonymousSubject } from 'rxjs/internal/Subject';
 import { Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { Message } from '../models/Message';
 
 const CHAT_URL = 'ws://localhost:5000';
-
-export interface Message {
-  source: string;
-  content: string;
-}
 
 @Injectable()
 export class WebsocketService {

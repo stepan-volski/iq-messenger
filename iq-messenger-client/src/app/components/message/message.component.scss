@@ -1,0 +1,22 @@
+:host {
+  display: flex;
+
+  p {
+    margin: 0;
+  }
+}
+
+.message {
+  border-radius: 8px;
+  padding: 5px;
+  margin: 5px;
+  width: fit-content;
+}
+
+.current-author {
+  background-color: lightblue;
+}
+
+.other-author {
+  background-color: beige;
+}

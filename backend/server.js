@@ -1,11 +1,12 @@
 import express from 'express';
 import ws from 'ws';
 import mongoose from 'mongoose';
-import https from 'https';
-import http from 'http';
 import chatRouter from './chat/ChatRouter.js';
 import { Server } from 'socket.io';
+import { get, post } from './request.js';
 
+const HOST = 'localhost';
+const PATH = '/chat';
 const PORT_WS = 5000;
 const PORT_API = 4000;
 const DB_URL =
@@ -15,39 +16,21 @@ const app = express();
 app.use(express.json());
 app.use('/chat', chatRouter);
 
-// message types:
-// - chat_init
-// - message
-
 const wsServer = new ws.Server({ noServer: true });
 wsServer.on('connection', (socket) => {
   socket.on('message', (message) => {
     console.log('message', JSON.parse(message));
     let formattedMessage = JSON.parse(message);
-    wsServer.clients.forEach(function each(client) {
+    wsServer.clients.forEach(async function each(client) {
       if (formattedMessage.type === 'chat_init') {
-        http
-          .get(`http://localhost:${PORT_API}/chat`, (resp) => {
-            let data = '';
-            // A chunk of data has been received.
-            resp.on('data', (chunk) => {
-              data += chunk;
-            });
-
-            // The whole response has been received. Print out the result.
-            resp.on('end', () => {
-              formattedMessage = JSON.parse(data);
-            });
-          })
-          .on('error', (err) => {
-            console.log('Error: ' + err.message);
-          });
+        formattedMessage = await get(HOST, PATH);
+        client.send(JSON.stringify(formattedMessage));
+        return;
       }
 
       if (client.readyState === ws.OPEN) {
-        setTimeout(function () {
-          client.send(JSON.stringify(formattedMessage));
-        }, 1000);
+        post(HOST, PATH, formattedMessage);
+        client.send(JSON.stringify(formattedMessage));
       }
     });
   });

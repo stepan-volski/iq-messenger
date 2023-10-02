@@ -2,12 +2,27 @@ import http from 'http';
 
 const PORT_API = 4000;
 
-export function get() {
+export function get(host, path) {
   const options = {
-    host: 'localhost',
+    host,
     port: PORT_API,
-    path: '/chat',
+    path,
     method: 'GET',
+  };
+
+  return request(options);
+}
+
+export function post(host, path, message) {
+  const options = {
+    host,
+    port: PORT_API,
+    path,
+    method: 'POST',
+    postData: message,
+    headers: {
+      'Content-Type': 'application/json',
+    },
   };
 
   return request(options);
@@ -31,6 +46,7 @@ function request(options) {
       .on('error', (err) => {
         reject(err.message);
       });
+    req.write(JSON.stringify(options.postData || ''));
     req.end();
   });
 }

@@ -1,11 +1,12 @@
 import express from 'express';
 import ws from 'ws';
 import mongoose from 'mongoose';
-import http from 'http';
 import chatRouter from './chat/ChatRouter.js';
 import { Server } from 'socket.io';
-import { get } from './request.js';
+import { get, post } from './request.js';
 
+const HOST = 'localhost';
+const PATH = '/chat';
 const PORT_WS = 5000;
 const PORT_API = 4000;
 const DB_URL =
@@ -21,12 +22,14 @@ wsServer.on('connection', (socket) => {
     console.log('message', JSON.parse(message));
     let formattedMessage = JSON.parse(message);
     wsServer.clients.forEach(async function each(client) {
-
       if (formattedMessage.type === 'chat_init') {
-        formattedMessage = await get();
+        formattedMessage = await get(HOST, PATH);
+        client.send(JSON.stringify(formattedMessage));
+        return;
       }
 
       if (client.readyState === ws.OPEN) {
+        post(HOST, PATH, formattedMessage);
         client.send(JSON.stringify(formattedMessage));
       }
     });

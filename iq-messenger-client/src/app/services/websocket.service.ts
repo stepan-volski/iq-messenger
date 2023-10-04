@@ -13,12 +13,10 @@ export class WebsocketService {
   messages: Subject<Message>;
 
   constructor() {
-    this.messages = <Subject<Message>>this.connect(CHAT_URL).pipe(
-      map((response: MessageEvent): Message => {
-        console.log(response.data);
-        let data = JSON.parse(response.data);
-        return data;
-      })
+    this.messages = <Subject<Message>>(
+      this.connect(CHAT_URL).pipe(
+        map((response: MessageEvent): Message => JSON.parse(response.data))
+      )
     );
   }
 

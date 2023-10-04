@@ -1,9 +1,10 @@
-<div class="message-avatar">
+<div class="message__avatar">
   {{ message.author?.toUpperCase()?.substring(0, 2) }}
 </div>
 <div
-  class="message-content"
+  class="message__content"
   [ngClass]="message.author === 'Aleksey' ? 'current-author' : 'other-author'"
 >
   <p>{{ message.content }}</p>
+  <button class="message__delete" (click)="deleteMessage()">Delete</button>
 </div>

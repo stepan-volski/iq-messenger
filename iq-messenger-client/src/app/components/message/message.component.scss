@@ -8,29 +8,31 @@
   }
 }
 
-.message-content {
-  border-radius: 8px;
-  padding: 5px;
-  margin: 5px;
-  width: fit-content;
-}
+.message {
+  &__content {
+    border-radius: 8px;
+    padding: 5px;
+    margin: 5px;
+    width: fit-content;
 
-.current-author {
-  background-color: lightblue;
-}
+    &.current-author {
+      background-color: lightblue;
+    }
 
-.other-author {
-  background-color: beige;
-}
+    &.other-author {
+      background-color: beige;
+    }
+  }
 
-.message-avatar {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 25px;
-  height: 25px;
-  border-radius: 50%;
-  border: 1px solid black;
-  background-color: white;
-  text-align: center;
+  &__avatar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    border: 1px solid black;
+    background-color: white;
+    text-align: center;
+  }
 }

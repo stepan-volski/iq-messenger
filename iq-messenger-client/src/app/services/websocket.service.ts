@@ -10,7 +10,7 @@ const CHAT_URL = 'ws://localhost:5000';
 @Injectable()
 export class WebsocketService {
   private subject!: AnonymousSubject<MessageEvent>;
-  public messages: Subject<Message>;
+  messages: Subject<Message>;
 
   constructor() {
     this.messages = <Subject<Message>>this.connect(CHAT_URL).pipe(
@@ -22,12 +22,16 @@ export class WebsocketService {
     );
   }
 
-  public connect(url: string): AnonymousSubject<MessageEvent> {
+  connect(url: string): AnonymousSubject<MessageEvent> {
     if (!this.subject) {
       this.subject = this.create(url);
       console.log('Successfully connected: ' + url);
     }
     return this.subject;
+  }
+
+  sendMessage(message: Message) {
+    this.messages.next(message);
   }
 
   private create(url: string): AnonymousSubject<MessageEvent> {

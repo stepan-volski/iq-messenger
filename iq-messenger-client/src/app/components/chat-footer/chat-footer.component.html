@@ -1,9 +1,15 @@
-<form class="example-form" (ngSubmit)="sendMsg()">
-  <mat-form-field class="example-full-width">
-    <input matInput type="text" [(ngModel)]="value" name="message-field" />
-    <button *ngIf="value" matSuffix mat-icon-button (click)="value = ''">
+<form (ngSubmit)="sendMsg()">
+  <mat-button-toggle-group name="author" [(ngModel)]="author" (change)="onAuthorToggleChange($event)">
+    <mat-button-toggle value="Stepan">st</mat-button-toggle>
+    <mat-button-toggle value="Aleksey">al</mat-button-toggle>
+  </mat-button-toggle-group>
+
+  <mat-form-field class="message-field">
+    <input matInput type="text" [(ngModel)]="message" name="message-field" />
+    <button *ngIf="message" matSuffix mat-icon-button (click)="message = ''">
       <mat-icon>close</mat-icon>
     </button>
   </mat-form-field>
+
   <button mat-flat-button color="primary">Send</button>
 </form>

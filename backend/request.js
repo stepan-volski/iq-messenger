@@ -13,6 +13,17 @@ export function get(host, path) {
   return request(options);
 }
 
+export function remove(host, path, id) {
+  const options = {
+    host,
+    port: PORT_API,
+    path: `${path}/${id}`,
+    method: 'DELETE',
+  };
+
+  return request(options);
+}
+
 export function post(host, path, message) {
   const options = {
     host,

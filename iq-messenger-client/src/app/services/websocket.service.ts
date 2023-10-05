@@ -10,24 +10,26 @@ const CHAT_URL = 'ws://localhost:5000';
 @Injectable()
 export class WebsocketService {
   private subject!: AnonymousSubject<MessageEvent>;
-  public messages: Subject<Message>;
+  messages: Subject<Message>;
 
   constructor() {
-    this.messages = <Subject<Message>>this.connect(CHAT_URL).pipe(
-      map((response: MessageEvent): Message => {
-        console.log(response.data);
-        let data = JSON.parse(response.data);
-        return data;
-      })
+    this.messages = <Subject<Message>>(
+      this.connect(CHAT_URL).pipe(
+        map((response: MessageEvent): Message => JSON.parse(response.data))
+      )
     );
   }
 
-  public connect(url: string): AnonymousSubject<MessageEvent> {
+  connect(url: string): AnonymousSubject<MessageEvent> {
     if (!this.subject) {
       this.subject = this.create(url);
       console.log('Successfully connected: ' + url);
     }
     return this.subject;
+  }
+
+  sendMessage(message: Message) {
+    this.messages.next(message);
   }
 
   private create(url: string): AnonymousSubject<MessageEvent> {

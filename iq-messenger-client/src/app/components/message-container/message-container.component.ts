@@ -16,12 +16,20 @@ export class MessageContainerComponent {
   received: Message[] = [];
   sent: Message[] = [];
 
-  constructor(private messageService: MessageService, private websocketService: WebsocketService) {
+  constructor(
+    private messageService: MessageService,
+    private websocketService: WebsocketService
+  ) {
     // this.messages = this.messageService.getMessages();
 
     websocketService.messages.subscribe((msg: Message | Message[]) => {
       if (Array.isArray(msg)) {
         this.received = this.received.concat(msg);
+      } else if (msg.type === 'message_remove') {
+        this.received.splice(
+          this.received.map((message) => message._id).indexOf(msg._id),
+          1
+        );
       } else {
         this.received.push(msg);
       }
@@ -35,7 +43,7 @@ export class MessageContainerComponent {
         type: 'chat_init',
       };
 
-      this.websocketService.messages.next(initChatMessage);
+      this.websocketService.sendMessage(initChatMessage);
     }, 1000);
   }
 
@@ -47,6 +55,6 @@ export class MessageContainerComponent {
     };
 
     this.sent.push(message);
-    this.websocketService.messages.next(message);
+    this.websocketService.sendMessage(message);
   }
 }

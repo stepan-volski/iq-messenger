@@ -3,5 +3,5 @@ export interface State {
 }
 
 export const initialState: State = {
-  chatBackgroundUrl: '/assets'
+  chatBackgroundUrl: '../../../assets/chat-bg.svg'
 }

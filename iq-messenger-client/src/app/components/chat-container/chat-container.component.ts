@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { RootStoreState } from 'src/app/store';
 import { selectChatState } from 'src/app/store/chat-store/selectors';
@@ -8,24 +8,18 @@ import { selectChatState } from 'src/app/store/chat-store/selectors';
   templateUrl: './chat-container.component.html',
   styleUrls: ['./chat-container.component.scss'],
 })
-export class ChatContainerComponent {
+export class ChatContainerComponent implements OnInit {
+  private backgroundUrl = '';
 
-  chatBackgroundUrl;
-
-  constructor(private store$: Store<RootStoreState.State>) {
-
-    this.chatBackgroundUrl = '../../../assets/chat-bg.svg';
-  }
+  constructor(private store$: Store<RootStoreState.State>) {}
 
   ngOnInit() {
+    this.store$.select(selectChatState).subscribe((state) => {
+      this.backgroundUrl = state.chatBackgroundUrl;
+    });
+  }
 
-    this.chatBackgroundUrl = '../../../assets/chat-bg.svg';
-
-    this.store$
-      .select(selectChatState)
-      .pipe()
-      .subscribe((state) => {
-        this.chatBackgroundUrl = state.chatBackgroundUrl;
-      });
+  getFormattedBackgroundUrl() {
+    return { 'background-image': 'url(' + this.backgroundUrl + ')' };
   }
 }

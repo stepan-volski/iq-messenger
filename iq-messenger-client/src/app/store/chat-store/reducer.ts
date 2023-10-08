@@ -4,8 +4,8 @@ import { ChatStoreActions } from "./actions";
 
 export const featureReducer = createReducer(
   initialState,
-  on(ChatStoreActions.setChatBackground, (state, { backgroundUrl }) => ({
+  on(ChatStoreActions.setChatBackground, (state, { chatBackgroundUrl }) => ({
     ...state,
-    backgroundUrl
+    chatBackgroundUrl
   }))
 )

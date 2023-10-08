@@ -1,5 +1,7 @@
-<div class="chat-container">
-  <!-- <app-test></app-test> -->
+<div
+  class="chat-container"
+  [ngStyle]="getFormattedBackgroundUrl()"
+>
   <app-chat-header></app-chat-header>
   <app-message-container></app-message-container>
   <app-chat-footer></app-chat-footer>

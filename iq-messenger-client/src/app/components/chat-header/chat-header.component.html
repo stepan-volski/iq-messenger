@@ -1,8 +1,12 @@
 <div class="chat-header">
-  <mat-toolbar >
-  <button mat-icon-button>
-    <mat-icon>menu</mat-icon>
-  </button>
-  <span>Dialog with [user name]</span>
+  <mat-toolbar>
+    <button mat-icon-button [matMenuTriggerFor]="menu">
+      <mat-icon>menu</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu" >
+      <button mat-menu-item (click)="openBackgroundSelectorDialog()">Change background</button>
+      <button mat-menu-item>Future function</button>
+    </mat-menu>
+    <span>Dialog with [user name]</span>
   </mat-toolbar>
 </div>

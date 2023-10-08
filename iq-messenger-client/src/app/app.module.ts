@@ -16,6 +16,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatDialogModule } from '@angular/material/dialog';
+import { BackgroundDialogComponent } from './components/dialogs/background-dialog/background-dialog.component';
+import { RootStoreModule } from './store/root-store.module';
 
 @NgModule({
   declarations: [
@@ -25,6 +29,7 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
     ChatFooterComponent,
     MessageContainerComponent,
     ChatContainerComponent,
+    BackgroundDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -37,6 +42,9 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
     BrowserAnimationsModule,
     MatToolbarModule,
     MatButtonToggleModule,
+    MatMenuModule,
+    MatDialogModule,
+    RootStoreModule
   ],
   providers: [],
   bootstrap: [AppComponent],

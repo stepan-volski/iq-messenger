@@ -1,26 +1,22 @@
 import { Component } from '@angular/core';
 import { Message } from 'src/app/models/Message';
-import { MessageService } from 'src/app/services/message.service';
 import { WebsocketService } from 'src/app/services/websocket.service';
 
 @Component({
   selector: 'app-message-container',
   templateUrl: './message-container.component.html',
   styleUrls: ['./message-container.component.scss'],
-  providers: [MessageService],
+  providers: [],
 })
 export class MessageContainerComponent {
-  // public messages: Message[];
 
   content = '';
   received: Message[] = [];
   sent: Message[] = [];
 
   constructor(
-    private messageService: MessageService,
     private websocketService: WebsocketService
   ) {
-    // this.messages = this.messageService.getMessages();
 
     websocketService.messages.subscribe((msg: Message | Message[]) => {
       if (Array.isArray(msg)) {

@@ -5,5 +5,5 @@ export interface Message {
   timeStamp?: Date;
   isRead?: boolean;
   isDelivered?: boolean;
-  author?: string;
+  author?: string | null;
 }

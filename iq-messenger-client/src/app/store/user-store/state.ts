@@ -1,7 +1,8 @@
 export interface State {
-  currentUser: string;
+  [x: string]: any;
+  currentUser: string | null;
 }
 
 export const initialState: State = {
-  currentUser: 'Stepan',
-}
+  currentUser: null,
+};

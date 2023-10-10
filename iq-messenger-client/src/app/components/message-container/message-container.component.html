@@ -2,6 +2,8 @@
   <app-message
     *ngFor="let message of received"
     [message]="message"
-    [ngClass]="message.author === 'Aleksey' ? 'align-left' : 'align-right'"
+    [ngClass]="
+      message.author === currentUserName ? 'align-right' : 'align-left'
+    "
   ></app-message>
 </div>

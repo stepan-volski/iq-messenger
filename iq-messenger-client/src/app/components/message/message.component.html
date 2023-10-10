@@ -3,7 +3,7 @@
 </div>
 <div
   class="message__content"
-  [ngClass]="message.author === 'Aleksey' ? 'current-author' : 'other-author'"
+  [ngClass]="isMyMessage ? 'current-author' : 'other-author'"
 >
   <p>{{ message.content }}</p>
   <button class="message__delete" (click)="deleteMessage()">Delete</button>

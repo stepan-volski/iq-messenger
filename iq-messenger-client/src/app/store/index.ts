@@ -1,3 +1,1 @@
-import * as RootStoreState from './state';
-
-export { RootStoreState };
+export * as RootStoreState from './state'

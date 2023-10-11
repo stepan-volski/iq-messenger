@@ -1,12 +1,15 @@
 import express from 'express';
 import ws from 'ws';
 import mongoose from 'mongoose';
+import cors from 'cors';
 import chatRouter from './chat/ChatRouter.js';
+import userRouter from './user/UserRouter.js';
 import { Server } from 'socket.io';
-import { get, post, remove } from './request.js';
+import { get, post, remove } from './chat/ChatRequest.js';
 
 const HOST = 'localhost';
-const PATH = '/chat';
+const CHAT_PATH = '/chat';
+const USER_PATH = '/user';
 const PORT_WS = 5000;
 const PORT_API = 4000;
 const DB_URL =
@@ -14,7 +17,9 @@ const DB_URL =
 
 const app = express();
 app.use(express.json());
+app.use(cors());
 app.use('/chat', chatRouter);
+app.use('/user', userRouter);
 
 const wsServer = new ws.Server({ noServer: true });
 wsServer.on('connection', (socket) => {
@@ -23,13 +28,17 @@ wsServer.on('connection', (socket) => {
 
     wsServer.clients.forEach(async function each(client) {
       if (formattedMessage.type === 'chat_init') {
-        const initMessages = await get(HOST, PATH);
+        const initMessages = await get(HOST, CHAT_PATH);
         client.send(JSON.stringify(initMessages));
         return;
       }
 
       if (formattedMessage.type === 'message_remove') {
-        const removedMessage = await remove(HOST, PATH, formattedMessage._id);
+        const removedMessage = await remove(
+          HOST,
+          CHAT_PATH,
+          formattedMessage._id
+        );
         client.send(
           JSON.stringify({ ...removedMessage, type: 'message_remove' })
         );
@@ -37,7 +46,7 @@ wsServer.on('connection', (socket) => {
       }
 
       if (client.readyState === ws.OPEN) {
-        const messageFromDB = await post(HOST, PATH, formattedMessage);
+        const messageFromDB = await post(HOST, CHAT_PATH, formattedMessage);
         client.send(JSON.stringify(messageFromDB));
       }
     });

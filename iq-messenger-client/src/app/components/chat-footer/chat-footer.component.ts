@@ -2,9 +2,9 @@ import { Component } from '@angular/core';
 import { Message } from 'src/app/models/Message';
 import { WebsocketService } from 'src/app/services/websocket.service';
 import { Store } from '@ngrx/store';
-import { RootStoreState } from 'src/app/store';
 import { selectUserState } from 'src/app/store/user-store/selectors';
 import { UserStoreActions } from 'src/app/store/user-store/actions';
+import { RootStoreState } from 'src/app/store';
 
 @Component({
   selector: 'app-chat-footer',
@@ -13,12 +13,14 @@ import { UserStoreActions } from 'src/app/store/user-store/actions';
 })
 export class ChatFooterComponent {
   message = '';
-  author = '';
+  author!: string | null;
 
-  constructor(private store$: Store<RootStoreState.State>, private websocketService: WebsocketService) {}
+  constructor(
+    private store$: Store<RootStoreState.State>,
+    private websocketService: WebsocketService
+  ) {}
 
   ngOnInit() {
-
     this.store$
       .select(selectUserState)
       .pipe()
@@ -36,9 +38,5 @@ export class ChatFooterComponent {
 
     this.websocketService.messages.next(message);
     this.message = '';
-  }
-
-  onAuthorToggleChange(event: any) {
-    this.store$.dispatch(UserStoreActions.setCurrentUser({currentUser: event.value}))
   }
 }

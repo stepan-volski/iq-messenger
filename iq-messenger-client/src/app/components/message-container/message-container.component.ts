@@ -1,6 +1,11 @@
 import { Component } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { Subject, takeUntil } from 'rxjs';
 import { Message } from 'src/app/models/Message';
 import { WebsocketService } from 'src/app/services/websocket.service';
+import { RootStoreState } from 'src/app/store';
+import { State } from 'src/app/store/state';
+import { selectCurrentUserName } from 'src/app/store/user-store/selectors';
 
 @Component({
   selector: 'app-message-container',
@@ -9,14 +14,20 @@ import { WebsocketService } from 'src/app/services/websocket.service';
   providers: [],
 })
 export class MessageContainerComponent {
-
   content = '';
   received: Message[] = [];
   sent: Message[] = [];
+  currentUserName: string | null = '';
+  destroyed$ = new Subject<void>();
 
   constructor(
+    private store$: Store<RootStoreState.State>,
     private websocketService: WebsocketService
   ) {
+    this.store$
+      .select(selectCurrentUserName)
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((name) => (this.currentUserName = name));
 
     websocketService.messages.subscribe((msg: Message | Message[]) => {
       if (Array.isArray(msg)) {
@@ -52,5 +63,10 @@ export class MessageContainerComponent {
 
     this.sent.push(message);
     this.websocketService.sendMessage(message);
+  }
+
+  ngOnDestroy() {
+    this.destroyed$.next();
+    this.destroyed$.complete();
   }
 }

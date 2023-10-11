@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { RootStoreState } from 'src/app/store';
 import { ChatStoreActions } from 'src/app/store/chat-store/actions';
 import { backgroundTitles } from '../../../../assets/background/background-titles';
+import { State } from 'src/app/store/state';
 
 @Component({
   selector: 'app-background-dialog',
@@ -10,7 +10,7 @@ import { backgroundTitles } from '../../../../assets/background/background-title
   styleUrls: ['./background-dialog.component.scss'],
 })
 export class BackgroundDialogComponent {
-  constructor(private store$: Store<RootStoreState.State>) {}
+  constructor(private store$: Store<State>) {}
 
   setBackground(event: MouseEvent) {
     const targetElement = event.target as HTMLElement;

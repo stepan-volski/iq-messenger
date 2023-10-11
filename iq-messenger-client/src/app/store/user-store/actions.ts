@@ -6,3 +6,7 @@ export const UserStoreActions = createActionGroup({
     'Set Current User': props<{ currentUser: string }>(),
   },
 });
+
+// export function setCurrentUser(arg0: { currentUser: any; }): any {
+//   throw new Error('Function not implemented.');
+// }

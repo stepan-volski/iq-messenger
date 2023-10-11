@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MessageComponent } from './components/message/message.component';
 import { ChatHeaderComponent } from './components/chat-header/chat-header.component';
 import { ChatFooterComponent } from './components/chat-footer/chat-footer.component';
@@ -20,6 +20,8 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatDialogModule } from '@angular/material/dialog';
 import { BackgroundDialogComponent } from './components/dialogs/background-dialog/background-dialog.component';
 import { RootStoreModule } from './store/root-store.module';
+import { LoginComponent } from './components/login/login.component';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -29,7 +31,8 @@ import { RootStoreModule } from './store/root-store.module';
     ChatFooterComponent,
     MessageContainerComponent,
     ChatContainerComponent,
-    BackgroundDialogComponent
+    BackgroundDialogComponent,
+    LoginComponent,
   ],
   imports: [
     BrowserModule,
@@ -44,7 +47,9 @@ import { RootStoreModule } from './store/root-store.module';
     MatButtonToggleModule,
     MatMenuModule,
     MatDialogModule,
-    RootStoreModule
+    RootStoreModule,
+    ReactiveFormsModule,
+    HttpClientModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

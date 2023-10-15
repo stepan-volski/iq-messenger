@@ -3,6 +3,12 @@ import { User } from '../models/User';
 import { BehaviorSubject, Observable, map, tap } from 'rxjs';
 import { RequestService } from './request.service';
 import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { RootStoreModule } from '../store/root-store.module';
+import { RootStoreState } from '../store';
+import { UserStoreActions } from '../store/user-store/actions';
+
+const userInCache = 'user';
 
 @Injectable({ providedIn: 'root' })
 export class LoginService {
@@ -12,23 +18,48 @@ export class LoginService {
     return this.userSubj.value;
   }
 
-  constructor(private request: RequestService, private router: Router) {}
+  constructor(
+    private request: RequestService,
+    private router: Router,
+    private store$: Store<RootStoreState.State>
+  ) {
+    const user = localStorage.getItem(userInCache);
+
+    if (user) {
+      const userObj = { username: user } as User;
+
+      this.userSubj.next(userObj);
+      this.store$.dispatch(
+        UserStoreActions.setCurrentUser({ currentUser: userObj.username })
+      );
+    }
+  }
 
   login(username: string, password: string) {
     return this.request.login(username, password).pipe(
       map((user) => {
+        let userObj = null;
+
         if (typeof user === 'object' && user.username) {
           this.userSubj.next(user);
-          return { username: user.username };
+          localStorage.setItem(userInCache, user.username);
+          userObj = { username: user.username };
         }
 
-        return null;
+        this.store$.dispatch(
+          UserStoreActions.setCurrentUser({
+            currentUser: userObj?.username || null,
+          })
+        );
+
+        return userObj;
       })
     );
   }
 
   logout() {
     this.userSubj.next(null);
+    localStorage.removeItem(userInCache);
     this.router.navigate(['/login']);
   }
 

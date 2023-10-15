@@ -14,7 +14,7 @@ import { selectCurrentUserName } from 'src/app/store/user-store/selectors';
 })
 export class MessageComponent {
   @Input() message!: Message;
-  private currentUserName!: string | null;
+  currentUserName!: string | null;
   destroyed$ = new Subject<void>();
 
   get isMyMessage(): boolean {

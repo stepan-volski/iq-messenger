@@ -1,12 +1,11 @@
-import { createActionGroup, props } from '@ngrx/store';
+import { createActionGroup, emptyProps, props } from '@ngrx/store';
 
 export const UserStoreActions = createActionGroup({
   source: 'User',
   events: {
-    'Set Current User': props<{ currentUser: string }>(),
+    'Set Current User': props<{ currentUser: string | null }>(),
+    Login: props<{ username: string; password: string }>(),
+    Register: props<{ username: string; password: string }>(),
+    Logout: emptyProps(),
   },
 });
-
-// export function setCurrentUser(arg0: { currentUser: any; }): any {
-//   throw new Error('Function not implemented.');
-// }

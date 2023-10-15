@@ -1,0 +1,9 @@
+<button mat-icon-button [matMenuTriggerFor]="menu">
+  <span>{{ username$ | async | abbreviation }}</span>
+</button>
+<mat-menu #menu="matMenu">
+  <button mat-menu-item class="user-menu--button" (click)="logout()">
+    <mat-icon>logout</mat-icon>
+    <span>Logout</span>
+  </button>
+</mat-menu>

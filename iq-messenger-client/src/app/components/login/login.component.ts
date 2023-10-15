@@ -24,11 +24,13 @@ export class LoginComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private route: ActivatedRoute,
     private router: Router,
     private loginService: LoginService,
-    private store$: Store<State>
-  ) {}
+  ) {
+    if (loginService.userValue?.username) {
+      this.router.navigate(['/']);
+    }
+  }
 
   ngOnInit(): void {
     this.loginForm = this.formBuilder.group({
@@ -51,9 +53,6 @@ export class LoginComponent implements OnInit {
         }
 
         this.router.navigate(['/']);
-        this.store$.dispatch(
-          UserStoreActions.setCurrentUser({ currentUser: user.username })
-        );
       });
   }
 

@@ -3,10 +3,13 @@
     <button mat-icon-button [matMenuTriggerFor]="menu">
       <mat-icon>menu</mat-icon>
     </button>
-    <mat-menu #menu="matMenu" >
-      <button mat-menu-item (click)="openBackgroundSelectorDialog()">Change background</button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item (click)="openBackgroundSelectorDialog()">
+        Change background
+      </button>
       <button mat-menu-item>Future function</button>
     </mat-menu>
     <span>Dialog with [user name]</span>
+    <app-user-menu></app-user-menu>
   </mat-toolbar>
 </div>

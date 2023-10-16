@@ -22,6 +22,8 @@ import { BackgroundDialogComponent } from './components/dialogs/background-dialo
 import { RootStoreModule } from './store/root-store.module';
 import { LoginComponent } from './components/login/login.component';
 import { HttpClientModule } from '@angular/common/http';
+import { UserMenuComponent } from './components/user-menu/user-menu.component';
+import { AbbreviationPipe } from './pipes/abbreviation.pipe';
 
 @NgModule({
   declarations: [
@@ -33,6 +35,8 @@ import { HttpClientModule } from '@angular/common/http';
     ChatContainerComponent,
     BackgroundDialogComponent,
     LoginComponent,
+    UserMenuComponent,
+    AbbreviationPipe,
   ],
   imports: [
     BrowserModule,

@@ -30,10 +30,11 @@ export class MessageContainerComponent {
 
   @HostListener('document:click', ['$event'])
   closeMenuOnOutsideClick(event: Event) {
-    if (this.isContextMenuOpened) {
-      if (!this.contextMenuRef!.nativeElement.contains(event.target)) {
-        this.closeContextMenu();
-      }
+    if (
+      this.isContextMenuOpened &&
+      !this.contextMenuRef!.nativeElement.contains(event.target)
+    ) {
+      this.closeContextMenu();
     }
   }
 

@@ -24,6 +24,7 @@ import { LoginComponent } from './components/login/login.component';
 import { HttpClientModule } from '@angular/common/http';
 import { UserMenuComponent } from './components/user-menu/user-menu.component';
 import { AbbreviationPipe } from './pipes/abbreviation.pipe';
+import { MessageMenuComponent } from './components/message-menu/message-menu/message-menu.component';
 
 @NgModule({
   declarations: [
@@ -37,6 +38,7 @@ import { AbbreviationPipe } from './pipes/abbreviation.pipe';
     LoginComponent,
     UserMenuComponent,
     AbbreviationPipe,
+    MessageMenuComponent,
   ],
   imports: [
     BrowserModule,

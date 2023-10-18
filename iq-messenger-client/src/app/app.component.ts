@@ -21,6 +21,7 @@ export class AppComponent {
     });
   }
 
+  //can be removed?
   sendMsg() {
     let message = {
       source: '',

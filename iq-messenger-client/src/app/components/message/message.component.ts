@@ -1,9 +1,8 @@
-import { Component } from '@angular/core';
-import { Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Subject, takeUntil } from 'rxjs';
 import { Message } from 'src/app/models/Message';
-import { WebsocketService } from 'src/app/services/websocket.service';
+import { ChatStoreActions } from 'src/app/store/chat-store/actions';
 import { State } from 'src/app/store/state';
 import { selectCurrentUserName } from 'src/app/store/user-store/selectors';
 
@@ -14,6 +13,8 @@ import { selectCurrentUserName } from 'src/app/store/user-store/selectors';
 })
 export class MessageComponent {
   @Input() message!: Message;
+  @Output() messageClicked: EventEmitter<MouseEvent> = new EventEmitter();
+
   currentUserName!: string | null;
   destroyed$ = new Subject<void>();
 
@@ -21,22 +22,21 @@ export class MessageComponent {
     return this.currentUserName === this.message.author;
   }
 
-  constructor(
-    private store$: Store<State>,
-    private websocketService: WebsocketService
-  ) {
+  constructor(private store$: Store<State>) {
     this.store$
       .select(selectCurrentUserName)
       .pipe(takeUntil(this.destroyed$))
       .subscribe((name) => (this.currentUserName = name));
   }
 
-  deleteMessage() {
-    const removeMessage: Message = {
-      _id: this.message._id,
-      type: 'message_remove',
-    };
-    this.websocketService.sendMessage(removeMessage);
+  openContextMenu(event: MouseEvent) {
+    event.preventDefault();
+    this.store$.dispatch(
+      ChatStoreActions.toggleMessageContextMenu({
+        messageWithContextMenu: this.message,
+      })
+    );
+    this.messageClicked.emit(event);
   }
 
   ngOnDestroy() {

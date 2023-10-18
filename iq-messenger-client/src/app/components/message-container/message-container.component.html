@@ -1,9 +1,17 @@
-<div class="message-container">
+<div class="message-container" #container>
   <app-message
     *ngFor="let message of received"
     [message]="message"
     [ngClass]="
       message.author === currentUserName ? 'align-right' : 'align-left'
     "
+    (messageClicked)="setContextMenuPosition($event)"
   ></app-message>
 </div>
+
+<app-message-menu
+  #contextMenu
+  *ngIf="isContextMenuOpened"
+  [@messageMenuAnimation]="menuState"
+  [ngStyle]="contextMenuPosition"
+></app-message-menu>

@@ -4,7 +4,7 @@
 <div
   class="message__content"
   [ngClass]="isMyMessage ? 'current-author' : 'other-author'"
+  (contextmenu)="openContextMenu($event)"
 >
   <p>{{ message.content }}</p>
-  <button class="message__delete" (click)="deleteMessage()">Delete</button>
 </div>

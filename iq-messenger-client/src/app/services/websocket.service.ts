@@ -32,6 +32,14 @@ export class WebsocketService {
     this.messages.next(message);
   }
 
+  deleteMessage(message: Message) {
+    const removeMessage: Message = {
+      _id: message._id,
+      type: 'message_remove',
+    };
+    this.sendMessage(removeMessage);
+  }
+
   private create(url: string): AnonymousSubject<MessageEvent> {
     let ws = new WebSocket(url);
     let observable = new Observable((obs: Observer<MessageEvent>) => {

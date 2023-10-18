@@ -7,5 +7,9 @@ export const featureReducer = createReducer(
   on(ChatStoreActions.setChatBackground, (state, { chatBackgroundUrl }) => ({
     ...state,
     chatBackgroundUrl
+  })),
+  on(ChatStoreActions.toggleMessageContextMenu, (state, { messageWithContextMenu }) => ({
+    ...state,
+    messageWithContextMenu
   }))
 )

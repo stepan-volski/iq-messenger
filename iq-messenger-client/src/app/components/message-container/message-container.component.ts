@@ -1,9 +1,16 @@
-import { Component, ElementRef, HostListener, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  HostListener,
+  ViewChild,
+} from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Subject, takeUntil } from 'rxjs';
 import { messageMenuAnimation } from 'src/app/animations/context-menu';
 import { Message } from 'src/app/models/Message';
 import { ContextMenuService } from 'src/app/services/context-menu.service';
+import { SharedElementsService } from 'src/app/services/shared-elements.service';
 import { WebsocketService } from 'src/app/services/websocket.service';
 import { RootStoreState } from 'src/app/store';
 import { selectMessageWithContextMenu } from 'src/app/store/chat-store/selectors';
@@ -16,8 +23,8 @@ import { MessageMenuComponent } from '../message-menu/message-menu/message-menu.
   styleUrls: ['./message-container.component.scss'],
   animations: [messageMenuAnimation],
 })
-export class MessageContainerComponent {
-  @ViewChild('container') container: ElementRef | undefined;
+export class MessageContainerComponent implements AfterViewInit {
+  @ViewChild('messageContainer') messageContainer: ElementRef | undefined;
   @ViewChild('contextMenu') contextMenuRef!: MessageMenuComponent;
   content = '';
   received: Message[] = [];
@@ -41,7 +48,8 @@ export class MessageContainerComponent {
   constructor(
     private store$: Store<RootStoreState.State>,
     private websocketService: WebsocketService,
-    private contextMenuService: ContextMenuService
+    private contextMenuService: ContextMenuService,
+    private sharedElementsService: SharedElementsService
   ) {
     this.store$
       .select(selectCurrentUserName)
@@ -82,6 +90,20 @@ export class MessageContainerComponent {
     }, 1000);
   }
 
+  ngAfterViewInit(): void {
+    //TODO: remove timeOut
+    if (this.messageContainer) {
+      setTimeout(() => {
+        this.scrollMessagesToBottom();
+      }, 2000);
+
+      this.sharedElementsService.registerElement(
+        'messageContainer',
+        this.messageContainer!
+      );
+    }
+  }
+
   //can be removed?
   sendMsg() {
     const message = {
@@ -105,6 +127,13 @@ export class MessageContainerComponent {
       (event.target as any).offsetWidth +
       15 +
       'px';
+  }
+
+  scrollMessagesToBottom() {
+    if (this.messageContainer) {
+      const container = this.messageContainer.nativeElement;
+      container.scrollTop = container.scrollHeight;
+    }
   }
 
   ngOnDestroy() {

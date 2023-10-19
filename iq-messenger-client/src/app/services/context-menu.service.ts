@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { ElementRef, Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Subject, takeUntil } from 'rxjs';
 import { ChatStoreActions } from '../store/chat-store/actions';
@@ -9,7 +9,6 @@ import { State } from '../store/state';
   providedIn: 'root',
 })
 export class ContextMenuService {
-  //TODO: later may be replaced by store actions
 
   isContextMenuOpened = false;
   menuState = this.isContextMenuOpened ? 'void' : 'active';

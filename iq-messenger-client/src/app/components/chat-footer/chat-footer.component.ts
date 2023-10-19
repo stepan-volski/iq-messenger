@@ -7,6 +7,7 @@ import {
 } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Message } from 'src/app/models/Message';
+import { SharedElementsService } from 'src/app/services/shared-elements.service';
 import { WebsocketService } from 'src/app/services/websocket.service';
 import { RootStoreState } from 'src/app/store';
 import { selectUserState } from 'src/app/store/user-store/selectors';
@@ -28,7 +29,8 @@ export class ChatFooterComponent implements OnInit {
 
   constructor(
     private store$: Store<RootStoreState.State>,
-    private websocketService: WebsocketService
+    private websocketService: WebsocketService,
+    private sharedElementsService: SharedElementsService
   ) {}
 
   ngOnInit() {
@@ -49,6 +51,19 @@ export class ChatFooterComponent implements OnInit {
       };
       this.websocketService.messages.next(message);
       this.message = '';
+    }
+    setTimeout(() => {    //todo: remove timeOut
+      this.scrollMessagesDown();
+    }, 150);
+  }
+
+  scrollMessagesDown() {
+    const parentElementRef =
+      this.sharedElementsService.getElement('messageContainer');
+
+    if (parentElementRef) {
+      const container = parentElementRef.nativeElement;
+      container.scrollTop = container.scrollHeight;
     }
   }
 }

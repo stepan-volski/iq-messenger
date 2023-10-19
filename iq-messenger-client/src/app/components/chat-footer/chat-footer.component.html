@@ -1,9 +1,4 @@
 <form (ngSubmit)="sendMsg()">
-  <!-- <mat-button-toggle-group name="author" [(ngModel)]="author" (change)="onAuthorToggleChange($event)">
-    <mat-button-toggle value="Stepan">s</mat-button-toggle>
-    <mat-button-toggle value="Aleksey">a</mat-button-toggle>
-  </mat-button-toggle-group> -->
-
   <mat-form-field class="message-field">
     <input matInput type="text" [(ngModel)]="message" name="message-field" />
     <button *ngIf="message" matSuffix mat-icon-button (click)="message = ''">

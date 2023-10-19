@@ -6,9 +6,13 @@ import { Message } from 'src/app/models/Message';
 import { ContextMenuService } from 'src/app/services/context-menu.service';
 import { WebsocketService } from 'src/app/services/websocket.service';
 import { RootStoreState } from 'src/app/store';
-import { selectMessageWithContextMenu } from 'src/app/store/chat-store/selectors';
+import {
+  selectMessageWithContextMenu,
+  selectPrintedMessages,
+} from 'src/app/store/chat-store/selectors';
 import { selectCurrentUserName } from 'src/app/store/user-store/selectors';
 import { MessageMenuComponent } from '../message-menu/message-menu/message-menu.component';
+import { ChatStoreActions } from 'src/app/store/chat-store/actions';
 
 @Component({
   selector: 'app-message-container',
@@ -20,13 +24,13 @@ export class MessageContainerComponent {
   @ViewChild('container') container: ElementRef | undefined;
   @ViewChild('contextMenu') contextMenuRef!: MessageMenuComponent;
   content = '';
-  received: Message[] = [];
   sent: Message[] = [];
   currentUserName: string | null = '';
   destroyed$ = new Subject<void>();
   isContextMenuOpened = false;
   menuState = this.isContextMenuOpened ? 'void' : 'active';
   contextMenuPosition: { [key: string]: string } = {};
+  messages$ = this.store$.select(selectPrintedMessages);
 
   @HostListener('document:click', ['$event'])
   closeMenuOnOutsideClick(event: Event) {
@@ -54,43 +58,9 @@ export class MessageContainerComponent {
         this.isContextMenuOpened = !!message;
       });
 
-    //TODO: can move it to service? or put into init method?
-    websocketService.messages.subscribe((msg: Message | Message[]) => {
-      if (Array.isArray(msg)) {
-        this.received = this.received.concat(msg);
-      } else if (msg.type === 'message_remove') {
-        this.received.splice(
-          this.received.map((message) => message._id).indexOf(msg._id),
-          1
-        );
-      } else {
-        this.received.push(msg);
-      }
-      console.log('Response from websocket: ', msg);
-    });
+    this.handleMessages();
 
-    //can be removed?
-    setTimeout(() => {
-      const initChatMessage = {
-        author: 'Aleksey',
-        content: '',
-        type: 'chat_init',
-      };
-
-      this.websocketService.sendMessage(initChatMessage);
-    }, 1000);
-  }
-
-  //can be removed?
-  sendMsg() {
-    const message = {
-      author: 'Aleksey',
-      content: this.content,
-      timeStamp: new Date(),
-    };
-
-    this.sent.push(message);
-    this.websocketService.sendMessage(message);
+    setTimeout(() => this.initChat(), 1000);
   }
 
   closeContextMenu() {
@@ -109,5 +79,37 @@ export class MessageContainerComponent {
   ngOnDestroy() {
     this.destroyed$.next();
     this.destroyed$.complete();
+  }
+
+  private handleMessages() {
+    this.websocketService.messages.subscribe((msg: Message | Message[]) => {
+      console.log('Response from websocket: ', msg);
+
+      if (Array.isArray(msg)) {
+        this.store$.dispatch(ChatStoreActions.printMessages({ messages: msg }));
+        return;
+      }
+
+      if (msg.type === 'message_remove') {
+        this.store$.dispatch(
+          ChatStoreActions.deletePrintedMessage({ messageId: msg._id || '' })
+        );
+        return;
+      }
+
+      this.store$.dispatch(
+        ChatStoreActions.addPrintedMessage({ message: msg })
+      );
+    });
+  }
+
+  private initChat() {
+    const initChatMessage = {
+      author: this.currentUserName,
+      content: '',
+      type: 'chat_init',
+    };
+
+    this.websocketService.sendMessage(initChatMessage);
   }
 }

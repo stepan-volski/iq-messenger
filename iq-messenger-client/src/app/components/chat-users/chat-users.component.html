@@ -1,0 +1,9 @@
+<button mat-icon-button [matMenuTriggerFor]="users" aria-label="Example icon-button with a menu">
+    <mat-icon>more_vert</mat-icon>
+  </button>
+  <mat-menu #users="matMenu">
+    <button mat-menu-item>
+      <mat-icon>dialpad</mat-icon>
+      <span>Redial</span>
+    </button>
+  </mat-menu>

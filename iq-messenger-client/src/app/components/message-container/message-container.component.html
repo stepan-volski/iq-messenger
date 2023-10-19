@@ -1,6 +1,6 @@
 <div class="message-container" #container>
   <app-message
-    *ngFor="let message of received"
+    *ngFor="let message of messages$ | async"
     [message]="message"
     [ngClass]="
       message.author === currentUserName ? 'align-right' : 'align-left'

@@ -5,6 +5,13 @@ export const ChatStoreActions = createActionGroup({
   source: 'Chat',
   events: {
     'Set Chat Background': props<{ chatBackgroundUrl: string }>(),
-    'Toggle Message Context Menu': props<{ messageWithContextMenu: Message | null }>(),
+    'Toggle Message Context Menu': props<{
+      messageWithContextMenu: Message | null;
+    }>(),
+    'Post Message': props<{ message: Message }>(),
+    'Print Messages': props<{ messages: Message[] }>(),
+    'Add Printed Message': props<{ message: Message }>(),
+    'Delete Message': props<{ messageId: string }>(),
+    'Delete Printed Message': props<{ messageId: string }>(),
   },
 });

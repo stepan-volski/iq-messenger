@@ -25,6 +25,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { UserMenuComponent } from './components/user-menu/user-menu.component';
 import { AbbreviationPipe } from './pipes/abbreviation.pipe';
 import { MessageMenuComponent } from './components/message-menu/message-menu/message-menu.component';
+import { ChatUsersComponent } from './components/chat-users/chat-users.component';
 
 @NgModule({
   declarations: [
@@ -39,6 +40,7 @@ import { MessageMenuComponent } from './components/message-menu/message-menu/mes
     UserMenuComponent,
     AbbreviationPipe,
     MessageMenuComponent,
+    ChatUsersComponent,
   ],
   imports: [
     BrowserModule,

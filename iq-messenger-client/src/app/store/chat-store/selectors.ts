@@ -8,6 +8,7 @@ export const selectMessageWithContextMenu = createSelector(
   (state) => state.messageWithContextMenu
 );
 
-export const selectPrintedMessages = createSelector(selectChatState, (state) =>
-  [...state.messages].reverse()
+export const selectPrintedMessages = createSelector(
+  selectChatState,
+  (state) => state.messages
 );

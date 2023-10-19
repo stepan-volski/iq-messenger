@@ -1,9 +1,15 @@
 <form (ngSubmit)="sendMsg()">
   <mat-form-field class="message-field">
-    <input matInput type="text" [(ngModel)]="message" name="message-field" />
-    <button *ngIf="message" matSuffix mat-icon-button (click)="message = ''">
-      <mat-icon>close</mat-icon>
-    </button>
+    <input
+      matInput
+      type="text"
+      [(ngModel)]="message"
+      name="message-field"
+      autofocus
+      (keydown.enter)="sendMsg()"
+      autocomplete="off"
+      #input
+    />
   </mat-form-field>
 
   <button mat-flat-button color="primary">Send</button>

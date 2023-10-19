@@ -4,5 +4,3 @@ import * as ChatStoreState from './state';
 export { ChatStoreModule } from './chat-store.module';
 
 export { ChatStoreActions, ChatStoreState };
-
-

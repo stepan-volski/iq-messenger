@@ -1,4 +1,4 @@
-<div class="message-container" #container>
+<div class="message-container" #messageContainer>
   <app-message
     *ngFor="let message of messages$ | async"
     [message]="message"

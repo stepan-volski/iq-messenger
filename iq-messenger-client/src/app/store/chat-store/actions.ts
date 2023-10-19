@@ -8,6 +8,7 @@ export const ChatStoreActions = createActionGroup({
     'Toggle Message Context Menu': props<{
       messageWithContextMenu: Message | null;
     }>(),
+    Init: props<{ username: string }>(),
     'Post Message': props<{ message: Message }>(),
     'Print Messages': props<{ messages: Message[] }>(),
     'Add Printed Message': props<{ message: Message }>(),
@@ -15,3 +16,4 @@ export const ChatStoreActions = createActionGroup({
     'Delete Printed Message': props<{ messageId: string }>(),
   },
 });
+

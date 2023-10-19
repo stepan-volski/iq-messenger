@@ -10,7 +10,9 @@ import { RootStoreState } from '../store';
 
 const CHAT_URL = 'ws://localhost:5000';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class WebsocketService {
   private subject!: AnonymousSubject<MessageEvent>;
   messages: Subject<Message>;

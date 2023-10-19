@@ -1,9 +1,16 @@
-import { Component, ElementRef, HostListener, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  HostListener,
+  ViewChild,
+} from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Subject, takeUntil } from 'rxjs';
 import { messageMenuAnimation } from 'src/app/animations/context-menu';
 import { Message } from 'src/app/models/Message';
 import { ContextMenuService } from 'src/app/services/context-menu.service';
+import { SharedElementsService } from 'src/app/services/shared-elements.service';
 import { WebsocketService } from 'src/app/services/websocket.service';
 import { RootStoreState } from 'src/app/store';
 import {
@@ -20,8 +27,8 @@ import { ChatStoreActions } from 'src/app/store/chat-store/actions';
   styleUrls: ['./message-container.component.scss'],
   animations: [messageMenuAnimation],
 })
-export class MessageContainerComponent {
-  @ViewChild('container') container: ElementRef | undefined;
+export class MessageContainerComponent implements AfterViewInit {
+  @ViewChild('messageContainer') messageContainer: ElementRef | undefined;
   @ViewChild('contextMenu') contextMenuRef!: MessageMenuComponent;
   content = '';
   sent: Message[] = [];
@@ -34,17 +41,19 @@ export class MessageContainerComponent {
 
   @HostListener('document:click', ['$event'])
   closeMenuOnOutsideClick(event: Event) {
-    if (this.isContextMenuOpened) {
-      if (!this.contextMenuRef!.nativeElement.contains(event.target)) {
-        this.closeContextMenu();
-      }
+    if (
+      this.isContextMenuOpened &&
+      !this.contextMenuRef!.nativeElement.contains(event.target)
+    ) {
+      this.closeContextMenu();
     }
   }
 
   constructor(
     private store$: Store<RootStoreState.State>,
     private websocketService: WebsocketService,
-    private contextMenuService: ContextMenuService
+    private contextMenuService: ContextMenuService,
+    private sharedElementsService: SharedElementsService
   ) {
     this.store$
       .select(selectCurrentUserName)
@@ -67,6 +76,20 @@ export class MessageContainerComponent {
     this.contextMenuService.closeContextMenu();
   }
 
+  ngAfterViewInit(): void {
+    //TODO: remove timeOut
+    if (this.messageContainer) {
+      setTimeout(() => {
+        this.scrollMessagesToBottom();
+      }, 2000);
+
+      this.sharedElementsService.registerElement(
+        'messageContainer',
+        this.messageContainer!
+      );
+    }
+  }
+
   setContextMenuPosition(event: MouseEvent) {
     this.contextMenuPosition['top'] = (event.target as any).offsetTop + 'px';
     this.contextMenuPosition['left'] =
@@ -74,6 +97,13 @@ export class MessageContainerComponent {
       (event.target as any).offsetWidth +
       15 +
       'px';
+  }
+
+  scrollMessagesToBottom() {
+    if (this.messageContainer) {
+      const container = this.messageContainer.nativeElement;
+      container.scrollTop = container.scrollHeight;
+    }
   }
 
   ngOnDestroy() {
@@ -104,12 +134,8 @@ export class MessageContainerComponent {
   }
 
   private initChat() {
-    const initChatMessage = {
-      author: this.currentUserName,
-      content: '',
-      type: 'chat_init',
-    };
-
-    this.websocketService.sendMessage(initChatMessage);
+    this.store$.dispatch(
+      ChatStoreActions.init({ username: this.currentUserName || '' })
+    );
   }
 }

@@ -4,15 +4,20 @@ import { AnonymousSubject } from 'rxjs/internal/Subject';
 import { Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Message } from '../models/Message';
+import { ChatStoreActions } from '../store/chat-store/actions';
+import { Store } from '@ngrx/store';
+import { RootStoreState } from '../store';
 
 const CHAT_URL = 'ws://localhost:5000';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class WebsocketService {
   private subject!: AnonymousSubject<MessageEvent>;
   messages: Subject<Message>;
 
-  constructor() {
+  constructor(private store$: Store<RootStoreState.State>) {
     this.messages = <Subject<Message>>(
       this.connect(CHAT_URL).pipe(
         map((response: MessageEvent): Message => JSON.parse(response.data))

@@ -7,3 +7,8 @@ export const selectMessageWithContextMenu = createSelector(
   selectChatState,
   (state) => state.messageWithContextMenu
 );
+
+export const selectPrintedMessages = createSelector(
+  selectChatState,
+  (state) => state.messages
+);

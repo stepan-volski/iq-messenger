@@ -47,6 +47,7 @@ wsServer.on('connection', (socket) => {
 
       if (client.readyState === ws.OPEN) {
         const messageFromDB = await post(HOST, CHAT_PATH, formattedMessage);
+        console.log('message posted');
         client.send(JSON.stringify(messageFromDB));
       }
     });
